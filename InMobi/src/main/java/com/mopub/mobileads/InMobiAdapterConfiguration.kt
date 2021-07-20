@@ -82,7 +82,7 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
         fun initializeInMobi(configuration: Map<String, String>, context: Context, inMobiInitCompletionListener: InMobiInitCompletionListener?) {
             try {
                 val accountId = getAccountId(configuration)
-                InMobiSdk.init(context, accountId, getGdprConsentObj()) { error ->
+                InMobiSdk.init(context, accountId, null) { error ->
                     if (error == null) {
                         MoPubLog.log(CUSTOM, ADAPTER_NAME, "InMobi initialization success.")
                         inMobiInitCompletionListener?.onSuccess()
@@ -91,6 +91,7 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
                         inMobiInitCompletionListener?.onFailure(error)
                     }
                 }
+                InMobiSdk.setPartnerProvidedConsent(getGdprConsentObj())
             } catch (accountIdException: InMobiAccountIdException) {
                 MoPubLog.log(CUSTOM_WITH_THROWABLE, accountIdException.localizedMessage, accountIdException)
                 inMobiInitCompletionListener?.onFailure(accountIdException)
