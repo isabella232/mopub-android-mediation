@@ -1,4 +1,7 @@
 ## Changelog
+  * 20.3.0.0
+    * This version of the adapters has been certified with AdMob 20.3.0 and MoPub 5.18.0.
+
   * 20.2.0.2
     * This version of the adapters has been certified with AdMob 20.2.0 and MoPub 5.18.0.
     * Refactor internal media layout to maintain compatibility with MoPub 5.18.0.
