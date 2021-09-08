@@ -1,4 +1,7 @@
 ## Changelog
+  * 3.7.5.1
+    * Refactor adapters and update to use latest Unity Ads APIs.
+
   * 3.7.5.0
     * This version of the adapters has been certified with Unity Ads 3.7.5 and MoPub SDK 5.17.0.
 
