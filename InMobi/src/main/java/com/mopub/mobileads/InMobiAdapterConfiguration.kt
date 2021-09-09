@@ -11,7 +11,12 @@ import com.mopub.common.logging.MoPubLog.AdapterLogEvent
 import com.mopub.common.logging.MoPubLog.AdapterLogEvent.CUSTOM
 import com.mopub.common.logging.MoPubLog.AdapterLogEvent.CUSTOM_WITH_THROWABLE
 import com.mopub.mobileads.inmobi.BuildConfig
+import org.json.JSONObject
 import java.lang.reflect.Field
+import java.util.*
+
+private const val KEY_PARTNER_GDPR_CONSENT = "partner_gdpr_consent_available"
+private const val KEY_PARTNER_GDPR_APPLIES = "partner_gdpr_applies"
 
 class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
 
@@ -86,6 +91,7 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
                         inMobiInitCompletionListener?.onFailure(error)
                     }
                 }
+                InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
             } catch (accountIdException: InMobiAccountIdException) {
                 MoPubLog.log(CUSTOM_WITH_THROWABLE, accountIdException.localizedMessage, accountIdException)
                 inMobiInitCompletionListener?.onFailure(accountIdException)
@@ -134,6 +140,14 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
             } catch (e: NumberFormatException) {
                 throw InMobiPlacementIdException("InMobi Placement ID parameter is incorrect, cannot cast it to Long, it has to be a proper Long value per InMobi's placement requirements. " +
                         placementIdErrorMessage)
+            }
+        }
+
+        private fun getGdprConsentObj(): JSONObject {
+            val gdprApplies = MoPub.getPersonalInformationManager()?.gdprApplies() == true
+            return JSONObject().apply {
+                put(KEY_PARTNER_GDPR_APPLIES, gdprApplies)
+                put(KEY_PARTNER_GDPR_CONSENT, MoPub.canCollectPersonalInformation())
             }
         }
 
