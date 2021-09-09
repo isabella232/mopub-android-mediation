@@ -28,6 +28,7 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
     }
 
     override fun getBiddingToken(context: Context): String? {
+        InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
         return InMobiSdk.getToken(inMobiTPExtras, null)
     }
 
