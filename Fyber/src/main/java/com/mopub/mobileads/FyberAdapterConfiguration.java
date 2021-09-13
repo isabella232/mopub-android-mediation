@@ -142,20 +142,17 @@ public class FyberAdapterConfiguration extends BaseAdapterConfiguration {
     }
 
     private static Boolean extractGdprFromMoPub() {
-        PersonalInfoManager personalInfoManager = MoPub.getPersonalInformationManager();
+        final PersonalInfoManager personalInfoManager = MoPub.getPersonalInformationManager();
 
         if (personalInfoManager != null && personalInfoManager.gdprApplies() == Boolean.TRUE) {
-            /* Only set the GDPR consent flag, if GDPR is applied. If GDPR is not applied,
-            canCollectPersonalInformation returns true, but there is no explicit consent*/
-                MoPubLog.log(CUSTOM, "Fyber will user GDPR consent collected by MoPub."
-                        + personalInfoManager.canCollectPersonalInformation());
-                return personalInfoManager.canCollectPersonalInformation();
-            } else if (personalInfoManager.getPersonalInfoConsentStatus() == ConsentStatus.UNKNOWN && MoPub.shouldAllowLegitimateInterest()) {
-                MoPubLog.log(CUSTOM, "GDPR result from MoPub is unknown and publisher allowed legitimate interest.");
-                return true;
-            } else {
-                MoPubLog.log(CUSTOM, "Fyber has not found any GDPR values");
-            }
+            MoPubLog.log(CUSTOM, "Fyber will user GDPR consent collected by MoPub.");
+            return personalInfoManager.canCollectPersonalInformation();
+        } else if (personalInfoManager.getPersonalInfoConsentStatus() == ConsentStatus.UNKNOWN && MoPub.shouldAllowLegitimateInterest()) {
+            MoPubLog.log(CUSTOM, "GDPR result from MoPub is unknown and publisher allowed legitimate interest.");
+            return true;
+        } else {
+            MoPubLog.log(CUSTOM, "Fyber has not found any GDPR values");
+        }
         return null;
     }
     

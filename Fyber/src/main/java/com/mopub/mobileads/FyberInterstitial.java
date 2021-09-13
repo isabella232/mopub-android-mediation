@@ -24,6 +24,7 @@ import com.mopub.common.MoPub;
 import com.mopub.common.Preconditions;
 import com.mopub.common.logging.MoPubLog;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 
 import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.CLICKED;
@@ -50,7 +51,7 @@ public class FyberInterstitial extends BaseAd {
   private String mSpotId;
 
   @Nullable
-  Context mContext;
+  WeakReference<Activity> mActivityReference;
 
   @Nullable
   @Override
@@ -74,7 +75,16 @@ public class FyberInterstitial extends BaseAd {
     Preconditions.checkNotNull(context);
     Preconditions.checkNotNull(adData);
 
-    mContext = context;
+    if (!(context instanceof Activity)) {
+      MoPubLog.log(getAdNetworkId(), CUSTOM, ADAPTER_NAME, "Context passed to load " +
+              "was not an Activity. Failing the request, as show will fail");
+
+      if (mLoadListener != null) {
+        mLoadListener.onAdLoadFailed(MoPubErrorCode.ADAPTER_CONFIGURATION_ERROR);
+      }
+      return;
+    }
+
     setAutomaticImpressionAndClickTracking(false);
 
     final Map<String, String> extras = adData.getExtras();
@@ -103,7 +113,7 @@ public class FyberInterstitial extends BaseAd {
                         OnFyberMarketplaceInitializedListener.FyberInitStatus status) {
                   //note - Fyber tries to load ads when "FAILED" because an ad request will re-attempt to initialize the relevant parts of the SDK.
                   if (status == OnFyberMarketplaceInitializedListener.FyberInitStatus.SUCCESSFULLY || status == OnFyberMarketplaceInitializedListener.FyberInitStatus.FAILED) {
-                    requestInterstitial(context, spotId, extras);
+                    requestInterstitial((Activity) context, spotId, extras);
                   } else if (mLoadListener != null) {
                     MoPubLog.log(getAdNetworkId(), LOAD_FAILED, ADAPTER_NAME,
                             MoPubErrorCode.ADAPTER_CONFIGURATION_ERROR.getIntCode(),
@@ -114,7 +124,7 @@ public class FyberInterstitial extends BaseAd {
               });
     } else if (InneractiveAdManager.wasInitialized()) {
       MoPubLog.log(getAdNetworkId(), LOAD_ATTEMPTED, ADAPTER_NAME);
-      requestInterstitial(context, spotId, extras);
+      requestInterstitial((Activity) context, spotId, extras);
     } else if (mLoadListener != null) {
       MoPubLog.log(getAdNetworkId(), LOAD_FAILED, ADAPTER_NAME,
               MoPubErrorCode.ADAPTER_CONFIGURATION_ERROR.getIntCode(),
@@ -129,8 +139,18 @@ public class FyberInterstitial extends BaseAd {
   public void show() {
     MoPubLog.log(getAdNetworkId(), SHOW_ATTEMPTED, ADAPTER_NAME);
 
-    if (mInterstitialSpot != null && mInterstitialSpot.isReady()) {
+    final Activity activity = mActivityReference == null ? null : mActivityReference.get();
 
+    if (activity == null) {
+      MoPubLog.log(getAdNetworkId(), SHOW_FAILED, ADAPTER_NAME);
+
+      if (mInteractionListener != null) {
+        mInteractionListener.onAdFailed(MoPubErrorCode.ADAPTER_CONFIGURATION_ERROR);
+      }
+      return;
+    }
+
+    if (mInterstitialSpot != null && mInterstitialSpot.isReady()) {
       final InneractiveFullscreenUnitController fullscreenUnitController = (InneractiveFullscreenUnitController) mInterstitialSpot
               .getSelectedUnitController();
       fullscreenUnitController.setEventsListener(new InneractiveFullscreenAdEventsListener() {
@@ -202,7 +222,7 @@ public class FyberInterstitial extends BaseAd {
 
       fullscreenUnitController.addContentController(videoContentController);
 
-      fullscreenUnitController.show((Activity) mContext);
+      fullscreenUnitController.show(activity);
     } else {
       MoPubLog.log(getAdNetworkId(), SHOW_FAILED, ADAPTER_NAME);
 
@@ -217,10 +237,14 @@ public class FyberInterstitial extends BaseAd {
       mInterstitialSpot.destroy();
       mInterstitialSpot = null;
     }
+    if (mActivityReference != null) {
+      mActivityReference.clear();
+      mActivityReference = null;
+    }
   }
 
-  private void requestInterstitial(final Context context, String spotId, Map<String, String> localExtras) {
-    mContext = context;
+  private void requestInterstitial(final Activity activity, String spotId, Map<String, String> localExtras) {
+    mActivityReference = new WeakReference<>(activity);
 
     FyberAdapterConfiguration.updateGdprConsentStatus();
 
