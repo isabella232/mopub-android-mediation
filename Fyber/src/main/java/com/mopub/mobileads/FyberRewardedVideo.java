@@ -240,7 +240,7 @@ public class FyberRewardedVideo extends BaseAd {
         }
 
         FyberAdapterConfiguration.updateGdprConsentStatus();
-
+        
         if (mRewardedSpot != null) {
             mRewardedSpot.destroy();
         }

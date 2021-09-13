@@ -1,4 +1,7 @@
 ## Changelog
+  * 1.14.0.0
+    * This version of the adapters has been certified with Verizon 1.14.0 and MoPub 5.18.0.
+
   * 1.13.0.0
     * This version of the adapters has been certified with Verizon 1.13.0 and MoPub 5.17.0.
 
