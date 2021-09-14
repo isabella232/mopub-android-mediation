@@ -1,4 +1,4 @@
-project.version = '9.2.0.0'
+project.version = '9.2.1.0'
 project.ext.networkName = 'inmobi_sdk'
 
 apply from: '../shared-build.gradle'
@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android'
 
 dependencies {
     implementation "com.inmobi.monetization:inmobi-ads:${sdkVersion}"
-    implementation "androidx.core:core-ktx:1.3.2"
+    implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Mandatory dependencies for InMobi
