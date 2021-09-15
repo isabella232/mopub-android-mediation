@@ -20,7 +20,7 @@ import java.util.*
 
 class InMobiNative : CustomEventNative() {
 
-    private var inMobiStaticNativeAd: InMobiNativeAd? = null
+    private var inMobiNativeAd: InMobiNativeAd? = null
     private var mPlacementId: Long = 0
     private var mNativeListener: CustomEventNativeListener? = null
     private lateinit var mContext: Context
@@ -92,7 +92,7 @@ class InMobiNative : CustomEventNative() {
     }
 
     private fun loadNative(context: Context, serverExtras: Map<String, String>, customEventNativeListener: CustomEventNativeListener) {
-        inMobiStaticNativeAd = try {
+        inMobiNativeAd = try {
             InMobiNativeAd(context, customEventNativeListener, mPlacementId)
         } catch (e: SdkNotInitializedException) {
             val msg = "Error while creating InMobiNativeAd Object. ${e.message}"
@@ -105,7 +105,7 @@ class InMobiNative : CustomEventNative() {
             )
             return
         }
-        inMobiStaticNativeAd?.setExtras(InMobiAdapterConfiguration.inMobiTPExtras)
+        inMobiNativeAd?.setExtras(InMobiAdapterConfiguration.inMobiTPExtras)
 
         val adMarkup = serverExtras[DataKeys.ADM_KEY]
         if (adMarkup != null) {
@@ -114,13 +114,13 @@ class InMobiNative : CustomEventNative() {
                 "Ad markup for InMobi Native ad request is present. Will make Advanced Bidding ad request " +
                         "using markup: " + adMarkup
             )
-            inMobiStaticNativeAd?.loadAd(adMarkup.toByteArray())
+            inMobiNativeAd?.loadAd(adMarkup.toByteArray())
         } else {
             MoPubLog.log(
                 AdapterLogEvent.CUSTOM, ADAPTER_NAME,
                 "Ad markup for InMobi Native ad request is not present. Will make traditional ad request "
             )
-            inMobiStaticNativeAd?.loadAd()
+            inMobiNativeAd?.loadAd()
         }
     }
 
@@ -236,11 +236,6 @@ class InMobiNative : CustomEventNative() {
                     notifyAdClicked()
                     mIsClickRecorded = true
                 }
-            }
-
-            override fun onAdStatusChanged(inMobiNative: InMobiNative) {
-                super.onAdStatusChanged(inMobiNative)
-                MoPubLog.log(AdapterLogEvent.CUSTOM, TAG, "InMobi Native ad onAdStatusChanged")
             }
         }
 
