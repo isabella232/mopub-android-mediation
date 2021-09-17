@@ -179,7 +179,6 @@ public class VerizonNative extends CustomEventNative {
         @Override
         public void destroy() {
             super.destroy();
-            nativeAd.destroy();
         }
     }
 
