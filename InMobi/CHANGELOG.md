@@ -1,4 +1,7 @@
 ## Changelog
+  * 9.2.1.0
+      * This version of the adapters has been certified with InMobi 9.2.1 and MoPub SDK 5.18.0.
+
   * 9.2.0.0
       * This version of the adapters has been certified with InMobi 9.2.0 and MoPub SDK 5.17.0.
 

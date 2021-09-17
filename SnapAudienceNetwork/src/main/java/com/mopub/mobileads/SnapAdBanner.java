@@ -13,6 +13,8 @@ import com.mopub.common.Preconditions;
 import com.mopub.common.logging.MoPubLog;
 import com.mopub.common.util.Views;
 import com.snap.adkit.external.BannerView;
+import com.snap.adkit.external.LoadAdConfig;
+import com.snap.adkit.external.LoadAdConfigBuilder;
 import com.snap.adkit.external.SnapAdClicked;
 import com.snap.adkit.external.SnapAdDismissed;
 import com.snap.adkit.external.SnapAdEventListener;
@@ -25,6 +27,7 @@ import com.snap.adkit.external.SnapBannerAdImpressionRecorded;
 
 import java.util.Map;
 
+import static com.mopub.common.DataKeys.ADM_KEY;
 import static com.mopub.common.DataKeys.ADUNIT_FORMAT;
 import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.CLICKED;
 import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.CUSTOM;
@@ -37,6 +40,7 @@ import static com.mopub.mobileads.MoPubErrorCode.INLINE_LOAD_ERROR;
 public class SnapAdBanner extends BaseAd {
     private static final String ADAPTER_NAME = SnapAdBanner.class.getSimpleName();
     private static final String SLOT_ID_KEY = "slotId";
+    private static final String APP_ID_KEY = "appId";
 
     private static String mSlotId;
     private BannerView mBannerView;
@@ -157,7 +161,11 @@ public class SnapAdBanner extends BaseAd {
             }
         });
 
-        mBannerView.loadAd(mSlotId, null);
+        final String adMarkup = extras.get(ADM_KEY);
+        final String appId = extras.get(APP_ID_KEY);
+        LoadAdConfig loadAdConfig = new LoadAdConfigBuilder()
+                .withPublisherSlotId(mSlotId).withBid(adMarkup).withAppId(appId).build();
+        mBannerView.loadAd(loadAdConfig);
     }
 
     private SnapAdSize getAdSize(String adUnitFormat) {
