@@ -28,7 +28,7 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
     }
 
     override fun getBiddingToken(context: Context): String? {
-        InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
+        updatePartnerGdprConsent()
         return InMobiSdk.getToken(inMobiTPExtras, null)
     }
 
@@ -92,7 +92,6 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
                         inMobiInitCompletionListener?.onFailure(error)
                     }
                 }
-                InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
             } catch (accountIdException: InMobiAccountIdException) {
                 MoPubLog.log(CUSTOM_WITH_THROWABLE, accountIdException.localizedMessage, accountIdException)
                 inMobiInitCompletionListener?.onFailure(accountIdException)
@@ -150,6 +149,10 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
                 put(KEY_PARTNER_GDPR_APPLIES, gdprApplies)
                 put(KEY_PARTNER_GDPR_CONSENT, MoPub.canCollectPersonalInformation())
             }
+        }
+
+        fun updatePartnerGdprConsent(){
+            InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
         }
 
         /**
