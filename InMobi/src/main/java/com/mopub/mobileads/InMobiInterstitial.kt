@@ -64,6 +64,7 @@ class InMobiInterstitial : BaseAd() {
 
         mInMobiAdapterConfiguration?.setCachedInitializationParameters(context, extras)
 
+        InMobiAdapterConfiguration.updatePartnerGdprConsent()
         InMobiAdapterConfiguration.initializeInMobi(extras, context, object : InMobiAdapterConfiguration.InMobiInitCompletionListener {
             override fun onSuccess() {
                 loadInterstitial(context, extras)

@@ -1,4 +1,7 @@
 ## Changelog
+  * 9.2.1.1
+      * MoPub now collects GDPR consent on behalf of InMobi.
+
   * 9.2.1.0
       * This version of the adapters has been certified with InMobi 9.2.1 and MoPub SDK 5.18.0.
 

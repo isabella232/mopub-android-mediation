@@ -28,7 +28,7 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
     }
 
     override fun getBiddingToken(context: Context): String? {
-        InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
+        updatePartnerGdprConsent()
         return InMobiSdk.getToken(inMobiTPExtras, null)
     }
 
@@ -66,8 +66,8 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
         fun onFailure(error: Throwable)
     }
 
-    class InMobiPlacementIdException(message: String): Exception(message)
-    class InMobiAccountIdException(message: String): Exception(message)
+    class InMobiPlacementIdException(message: String) : Exception(message)
+    class InMobiAccountIdException(message: String) : Exception(message)
 
     companion object {
         private const val ACCOUNT_ID_KEY = "accountid"
@@ -150,6 +150,10 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
                 put(KEY_PARTNER_GDPR_APPLIES, gdprApplies)
                 put(KEY_PARTNER_GDPR_CONSENT, MoPub.canCollectPersonalInformation())
             }
+        }
+
+        fun updatePartnerGdprConsent() {
+            InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
         }
 
         /**
