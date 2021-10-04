@@ -92,7 +92,6 @@ class InMobiAdapterConfiguration : BaseAdapterConfiguration() {
                         inMobiInitCompletionListener?.onFailure(error)
                     }
                 }
-                InMobiSdk.setPartnerGDPRConsent(getGdprConsentObj())
             } catch (accountIdException: InMobiAccountIdException) {
                 MoPubLog.log(CUSTOM_WITH_THROWABLE, accountIdException.localizedMessage, accountIdException)
                 inMobiInitCompletionListener?.onFailure(accountIdException)
