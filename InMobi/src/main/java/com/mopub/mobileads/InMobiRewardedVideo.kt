@@ -65,6 +65,7 @@ class InMobiRewardedVideo : BaseAd() {
 
         mInMobiAdapterConfiguration?.setCachedInitializationParameters(context, extras)
 
+        InMobiAdapterConfiguration.updatePartnerGdprConsent()
         InMobiAdapterConfiguration.initializeInMobi(extras, context, object : InMobiAdapterConfiguration.InMobiInitCompletionListener {
             override fun onSuccess() {
                 loadRewarded(context, extras)
