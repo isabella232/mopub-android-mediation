@@ -133,7 +133,6 @@ class InMobiNative : CustomEventNative() {
         private val mNativeClickHandler: NativeClickHandler = NativeClickHandler(mContext)
         private val mInMobiNative: InMobiNative
         private var mIsImpressionRecorded = false
-        private var mIsClickRecorded = false
 
         private val nativeAdEventListener: NativeAdEventListener = object : NativeAdEventListener() {
             override fun onAdLoadSucceeded(ad: InMobiNative, info: AdMetaInfo) {
@@ -232,10 +231,7 @@ class InMobiNative : CustomEventNative() {
             override fun onAdClicked(inMobiNative: InMobiNative) {
                 super.onAdClicked(inMobiNative)
                 MoPubLog.log(AdapterLogEvent.CUSTOM, TAG, "InMobi Native ad is clicked")
-                if (!mIsClickRecorded) {
-                    notifyAdClicked()
-                    mIsClickRecorded = true
-                }
+                notifyAdClicked()
             }
         }
 
