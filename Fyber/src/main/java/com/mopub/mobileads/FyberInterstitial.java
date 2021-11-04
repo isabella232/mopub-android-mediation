@@ -254,7 +254,7 @@ public class FyberInterstitial extends BaseAd {
 
     mInterstitialSpot = InneractiveAdSpotManager.get().createSpot();
     mInterstitialSpot.setMediationName(InneractiveMediationName.MOPUB);
-    mInterstitialSpot.setMediationVersion(MoPub.SDK_VERSION);
+    mInterstitialSpot.setMediationVersion(mFyberAdapterConfiguration.getMediationVersion());
 
     InneractiveFullscreenUnitController fullscreenUnitController = new InneractiveFullscreenUnitController();
     mInterstitialSpot.addUnitController(fullscreenUnitController);

@@ -65,7 +65,7 @@ public class FyberBanner extends BaseAd {
 
     mBannerSpot = InneractiveAdSpotManager.get().createSpot();
     mBannerSpot.setMediationName(InneractiveMediationName.MOPUB);
-    mBannerSpot.setMediationVersion(MoPub.SDK_VERSION);
+    mBannerSpot.setMediationVersion(mFyberAdapterConfiguration.getMediationVersion());
   
     InneractiveAdViewUnitController controller = new InneractiveAdViewUnitController();
     mBannerSpot.addUnitController(controller);

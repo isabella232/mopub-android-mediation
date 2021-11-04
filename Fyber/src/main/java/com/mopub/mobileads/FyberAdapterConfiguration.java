@@ -29,11 +29,15 @@ import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.CUSTOM_WITH_THRO
 public class FyberAdapterConfiguration extends BaseAdapterConfiguration {
 
     public final static String KEY_FYBER_APP_ID = "appID";
+    public final static String KEY_MUTE_STATE = "muted";
 
     private static final String ADAPTER_NAME = FyberAdapterConfiguration.class.getSimpleName();
     private static final String ADAPTER_VERSION = BuildConfig.VERSION_NAME;
     private final static String KEY_FYBER_DEBUG = "debug";
     private static final String MOPUB_NETWORK_NAME = BuildConfig.NETWORK_NAME;
+
+    @Nullable
+    private static Boolean sMuteState = null;
 
     @NonNull
     @Override
@@ -94,6 +98,11 @@ public class FyberAdapterConfiguration extends BaseAdapterConfiguration {
                                                    }
                                                }
                                            });
+
+                final String muteState = configuration.get(KEY_MUTE_STATE);
+                if (!TextUtils.isEmpty(muteState)) {
+                    sMuteState = Boolean.valueOf(muteState);
+                }
             } else {
                 MoPubLog.log(CUSTOM_WITH_THROWABLE, "No Fyber app id given in configuration object. " +
                         "Initialization postponed until the next ad request.");
@@ -155,7 +164,7 @@ public class FyberAdapterConfiguration extends BaseAdapterConfiguration {
         }
         return null;
     }
-    
+
     /**
      * Internal interface to bridge the gap between the custom event classes and the initializeNetwork
      */
@@ -215,5 +224,18 @@ public class FyberAdapterConfiguration extends BaseAdapterConfiguration {
                 request.setKeywords(keywords);
             }
         }
+
+        if (sMuteState != null) {
+            request.setMuteVideo(sMuteState);
+        }
+    }
+
+    public String getMediationVersion() {
+        String version = MoPub.SDK_VERSION;
+        try {
+            version = Class.forName("com.mopub.common.MoPub").getDeclaredField("SDK_VERSION").get(null).toString();
+        } catch (Exception ignored) {
+        }
+        return version;
     }
 }
