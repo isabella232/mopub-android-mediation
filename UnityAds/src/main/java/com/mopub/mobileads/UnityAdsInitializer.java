@@ -26,13 +26,13 @@ import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants
 
 public class UnityAdsInitializer {
     private static final String ADAPTER_NAME = UnityAdsInitializer.class.getSimpleName();
-    private static UnityAdsInitializer minstance;
+    private static UnityAdsInitializer mInstance;
 
     public static UnityAdsInitializer getInstance() {
-        if (minstance == null) {
-            minstance = new UnityAdsInitializer();
+        if (mInstance == null) {
+            mInstance = new UnityAdsInitializer();
         }
-        return minstance;
+        return mInstance;
     }
 
     // Returns false if initialized and true if initialization needs to take place
@@ -69,7 +69,7 @@ public class UnityAdsInitializer {
         UnityAds.setDebugMode(MoPubLog.getLogLevel() == MoPubLog.LogLevel.DEBUG);
         initGdpr(context);
         initMediationMetadata(context);
-        UnityAds.initialize(context, gameId, false, true, initializationListener);
+        UnityAds.initialize(context, gameId, false, initializationListener);
     }
 
     private void initGdpr(Context context) {

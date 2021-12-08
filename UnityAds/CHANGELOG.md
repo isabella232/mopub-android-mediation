@@ -1,4 +1,8 @@
 ## Changelog
+  * 4.0.0.0
+    * Update adapters to use latest Unity APIs and refactor event sending.
+    * This version of the adapters has been certified with Untiy Ads 4.0.0 and MoPub SDK 5.18.0.
+
   * 3.7.5.1
     * Refactor adapters and update to use latest Unity Ads APIs.
 
