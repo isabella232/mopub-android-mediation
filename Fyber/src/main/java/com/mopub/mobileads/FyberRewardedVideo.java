@@ -248,7 +248,7 @@ public class FyberRewardedVideo extends BaseAd {
         mRewardedSpot = InneractiveAdSpotManager.get().createSpot();
 
         mRewardedSpot.setMediationName(InneractiveMediationName.MOPUB);
-        mRewardedSpot.setMediationVersion(MoPub.SDK_VERSION);
+        mRewardedSpot.setMediationVersion(mFyberAdapterConfiguration.getMediationVersion());
 
         InneractiveFullscreenUnitController fullscreenUnitController = new InneractiveFullscreenUnitController();
         mRewardedSpot.addUnitController(fullscreenUnitController);

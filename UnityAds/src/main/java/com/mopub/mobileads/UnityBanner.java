@@ -24,6 +24,7 @@ import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.SHOW_SUCCESS;
 import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.WILL_LEAVE_APPLICATION;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_BANNER_LOAD_FAILED;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_BANNER_UNSUPPORTED;
+import com.mopub.mobileads.UnityAdsAdapterConfiguration.AdEvent;
 
 public class UnityBanner extends UnityBaseAd implements BannerView.IListener {
 
@@ -60,10 +61,7 @@ public class UnityBanner extends UnityBaseAd implements BannerView.IListener {
 
         if (isMediumRectangleFormat) {
             MoPubLog.log(getAdNetworkId(), CUSTOM, ADAPTER_NAME, LOG_BANNER_UNSUPPORTED.getMessage());
-
-            if (mLoadListener != null) {
-                mLoadListener.onAdLoadFailed(MoPubErrorCode.ADAPTER_CONFIGURATION_ERROR);
-            }
+            UnityEventAdapter.sendAdFailedToLoadEvent(mLoadListener, MoPubErrorCode.ADAPTER_CONFIGURATION_ERROR);
             return;
         }
 
@@ -84,33 +82,23 @@ public class UnityBanner extends UnityBaseAd implements BannerView.IListener {
         MoPubLog.log(getAdNetworkId(), SHOW_ATTEMPTED, ADAPTER_NAME);
         MoPubLog.log(getAdNetworkId(), SHOW_SUCCESS, ADAPTER_NAME);
 
-        if (mLoadListener != null) {
-            mLoadListener.onAdLoaded();
-            mBannerView = bannerView;
-        }
+        UnityEventAdapter.sendAdLoadedEvent(mLoadListener);
+        mBannerView = bannerView;
 
-        if (mInteractionListener != null) {
-            mInteractionListener.onAdImpression();
-        }
+        UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.IMPRESSION);
     }
 
     @Override
     public void onBannerClick(BannerView bannerView) {
         MoPubLog.log(getAdNetworkId(), CLICKED, ADAPTER_NAME);
-
-        if (mInteractionListener != null) {
-            mInteractionListener.onAdClicked();
-        }
+        UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.CLICK);
     }
 
     @Override
     public void onBannerFailedToLoad(BannerView bannerView, BannerErrorInfo errorInfo) {
         MoPubLog.log(getAdNetworkId(), CUSTOM, ADAPTER_NAME, String.format(LOG_BANNER_LOAD_FAILED.getMessage(),
                 getAdNetworkId(), errorInfo.errorMessage));
-
-        if (mLoadListener != null) {
-            mLoadListener.onAdLoadFailed(MoPubErrorCode.NETWORK_NO_FILL);
-        }
+        UnityEventAdapter.sendAdFailedToLoadEvent(mLoadListener, MoPubErrorCode.NETWORK_NO_FILL);
     }
 
     @Override

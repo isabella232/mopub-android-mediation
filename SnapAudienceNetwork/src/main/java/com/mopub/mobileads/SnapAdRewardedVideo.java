@@ -50,7 +50,7 @@ public class SnapAdRewardedVideo extends BaseAd {
     private static final String SLOT_ID_KEY = "slotId";
     private static final String APP_ID_KEY = "appId";
 
-    private static String mSlotId;
+    private String mSlotId;
     private final SnapAdAdapterConfiguration mSnapAdAdapterConfiguration;
 
     public SnapAdRewardedVideo() {
@@ -170,7 +170,7 @@ public class SnapAdRewardedVideo extends BaseAd {
         MoPubLog.log(getAdNetworkId(), SHOW_ATTEMPTED, ADAPTER_NAME);
 
         try {
-            adsNetworkApi.playAd(new SnapAdKitSlot(null, AdKitSlotType.REWARDED));
+            adsNetworkApi.playAd(new SnapAdKitSlot(mSlotId, AdKitSlotType.REWARDED));
         } catch (Exception exception) {
             MoPubLog.log(getAdNetworkId(), CUSTOM_WITH_THROWABLE, ADAPTER_NAME, exception);
             MoPubLog.log(getAdNetworkId(), SHOW_FAILED, ADAPTER_NAME,

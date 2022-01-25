@@ -23,6 +23,19 @@ public class UnityAdsAdapterConfiguration extends BaseAdapterConfiguration {
     public static final String ADAPTER_VERSION = com.mopub.mobileads.unityads.BuildConfig.VERSION_NAME;
     public static final String MOPUB_NETWORK_NAME = BuildConfig.NETWORK_NAME;
 
+    /**
+     * An enumeration of ad events that can occur during ad playback or playback attempt.
+     *
+     */
+    public enum AdEvent {
+        SHOW,
+        SHOW_FAILED,
+        CLICK,
+        IMPRESSION,
+        DISMISS,
+        COMPLETE
+    }
+
     public enum UnityAdsConstants {
         GAME_ID_KEY("gameId"),
         ZONE_ID_KEY("zoneId"),
