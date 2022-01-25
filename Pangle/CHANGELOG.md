@@ -1,4 +1,11 @@
 ## Changelog
+  * 4.1.1.2.0
+     * This version of the adapters has been certified with Pangle 4.1.1.2 and MoPub SDK 5.18.0.
+     * Remove `TTMultiProvider` from `AndroidManifest.xml`.
+
+  * 4.0.1.3.0
+     * This version of the adapters has been certified with Pangle 4.0.1.3 and MoPub SDK 5.18.0.
+
   * 3.9.0.5.0
      * This version of the adapters has been certified with Pangle 3.9.0.5 and MoPub SDK 5.18.0.
 

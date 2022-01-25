@@ -9,6 +9,7 @@ import com.unity3d.ads.UnityAds.UnityAdsShowCompletionState;
 import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.CUSTOM;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_FINISH_STATE;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_INTERSTITIAL_SHOW_COMPLETED;
+import com.mopub.mobileads.UnityAdsAdapterConfiguration.AdEvent;
 
 public class UnityInterstitial extends UnityVideoAd {
 
@@ -30,11 +31,8 @@ public class UnityInterstitial extends UnityVideoAd {
             @Override
             public void onUnityAdsShowComplete(String placementId, UnityAdsShowCompletionState state) {
                 MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_FINISH_STATE.getMessage() + state);
-
-                if (mInteractionListener != null) {
-                    MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_INTERSTITIAL_SHOW_COMPLETED.getMessage() + placementId);
-                    mInteractionListener.onAdDismissed();
-                }
+                MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_INTERSTITIAL_SHOW_COMPLETED.getMessage() + placementId);
+                UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.DISMISS);
             }
 
             @Override

@@ -1,4 +1,8 @@
 ## Changelog
+  * 8.1.0.0
+    * This version of the adapters has been certified with Fyber Marketplace 8.1.0 and MoPub 5.18.0.
+    * Add Fyber mute API support.
+
   * 7.8.4.0
     * This version of the adapters has been certified with Fyber Marketplace 7.8.4 and MoPub 5.18.0.
     

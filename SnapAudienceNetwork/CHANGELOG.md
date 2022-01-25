@@ -1,4 +1,7 @@
 ## Changelog
+* 2.3.0.0
+    * This version of the adapters has been certified with Snap Audience Network 2.3.0 and MoPub SDK 5.18.0.
+
 * 2.2.0.1
     * Add an option to pass `optOutRxJavaErrorHandling` to disable error handler override.
 

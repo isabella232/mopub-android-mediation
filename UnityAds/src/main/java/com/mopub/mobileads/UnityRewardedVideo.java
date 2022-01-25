@@ -11,6 +11,7 @@ import static com.mopub.common.logging.MoPubLog.AdapterLogEvent.SHOULD_REWARD;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_FINISH_STATE;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_REWARDED_SHOW_COMPLETED;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_SKIP;
+import com.mopub.mobileads.UnityAdsAdapterConfiguration.AdEvent;
 
 public class UnityRewardedVideo extends UnityVideoAd {
     private static final String ADAPTER_NAME = UnityRewardedVideo.class.getSimpleName();
@@ -35,12 +36,9 @@ public class UnityRewardedVideo extends UnityVideoAd {
                 switch (state) {
                     case COMPLETED:
                         MoPubLog.log(SHOULD_REWARD, ADAPTER_NAME, MoPubReward.NO_REWARD_AMOUNT, MoPubReward.NO_REWARD_LABEL);
-                        if (mInteractionListener != null) {
-                            mInteractionListener.onAdComplete(MoPubReward.success(MoPubReward.NO_REWARD_LABEL,
-                                    MoPubReward.DEFAULT_REWARD_AMOUNT));
-                            MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_REWARDED_SHOW_COMPLETED.getMessage() +
-                                    placementId);
-                        }
+                        MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_REWARDED_SHOW_COMPLETED.getMessage() +
+                                placementId);
+                        UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.COMPLETE);
                         break;
                     case SKIPPED:
                         MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_SKIP.getMessage());
@@ -49,9 +47,7 @@ public class UnityRewardedVideo extends UnityVideoAd {
                         break;
                 }
 
-                if (mInteractionListener != null) {
-                    mInteractionListener.onAdDismissed();
-                }
+                UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.DISMISS);
             }
 
             @Override

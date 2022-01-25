@@ -45,7 +45,7 @@ public class SnapAdInterstitial extends BaseAd {
     private static final String SLOT_ID_KEY = "slotId";
     private static final String APP_ID_KEY = "appId";
 
-    private static String mSlotId;
+    private String mSlotId;
 
     private final SnapAdAdapterConfiguration mSnapAdAdapterConfiguration;
 
@@ -158,7 +158,7 @@ public class SnapAdInterstitial extends BaseAd {
         try {
             MoPubLog.log(getAdNetworkId(), SHOW_ATTEMPTED, ADAPTER_NAME);
 
-            adsNetworkApi.playAd(new SnapAdKitSlot(null, AdKitSlotType.INTERSTITIAL));
+            adsNetworkApi.playAd(new SnapAdKitSlot(mSlotId, AdKitSlotType.INTERSTITIAL));
         } catch (Exception exception) {
             MoPubLog.log(getAdNetworkId(), CUSTOM, ADAPTER_NAME, "Failed to show Snap " +
                     "Audience Network Ads");

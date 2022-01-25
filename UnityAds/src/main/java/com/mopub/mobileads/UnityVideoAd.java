@@ -29,6 +29,7 @@ import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_PLACEMENT_ID_MISSING;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_SHOW_ACTIVITY_NULL;
 import static com.mopub.mobileads.UnityAdsAdapterConfiguration.UnityAdsConstants.LOG_SHOW_AD_FAILURE;
+import com.mopub.mobileads.UnityAdsAdapterConfiguration.AdEvent;
 
 public abstract class UnityVideoAd extends UnityBaseAd {
     private static final String ADAPTER_NAME = UnityVideoAd.class.getSimpleName();
@@ -72,9 +73,7 @@ public abstract class UnityVideoAd extends UnityBaseAd {
             MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_LOAD_SUCCESS.getMessage() + placementId);
             MoPubLog.log(LOAD_SUCCESS, ADAPTER_NAME);
 
-            if (mLoadListener != null) {
-                mLoadListener.onAdLoaded();
-            }
+            UnityEventAdapter.sendAdLoadedEvent(mLoadListener);
         }
 
         @Override
@@ -83,9 +82,7 @@ public abstract class UnityVideoAd extends UnityBaseAd {
             MoPubLog.log(CUSTOM, ADAPTER_NAME, LOG_LOAD_FAILED.getMessage() + placementId);
             MoPubLog.log(LOAD_FAILED, ADAPTER_NAME, MoPubErrorCode.NETWORK_NO_FILL.getIntCode(), MoPubErrorCode.NETWORK_NO_FILL);
 
-            if (mLoadListener != null) {
-                mLoadListener.onAdLoadFailed(MoPubErrorCode.NETWORK_NO_FILL);
-            }
+            UnityEventAdapter.sendAdFailedToLoadEvent(mLoadListener, MoPubErrorCode.NETWORK_NO_FILL);
         }
     };
 
@@ -106,9 +103,7 @@ public abstract class UnityVideoAd extends UnityBaseAd {
             mediationMetaData.setMissedImpressionOrdinal(++missedImpressionOrdinal);
             mediationMetaData.commit();
 
-            if (mInteractionListener != null) {
-                mInteractionListener.onAdFailed(MoPubErrorCode.VIDEO_PLAYBACK_ERROR);
-            }
+            UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.SHOW_FAILED, MoPubErrorCode.VIDEO_PLAYBACK_ERROR);
             return;
         }
 
@@ -126,28 +121,23 @@ public abstract class UnityVideoAd extends UnityBaseAd {
     protected void onUnityAdsShowStart(String placementId) {
         MoPubLog.log(SHOW_SUCCESS, ADAPTER_NAME);
 
-        if (mInteractionListener != null) {
-            mInteractionListener.onAdShown();
-            mInteractionListener.onAdImpression();
-        }
+        UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.SHOW);
+        UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.IMPRESSION);
     }
 
     protected void onUnityAdsShowClick(String placementId) {
         MoPubLog.log(CLICKED, ADAPTER_NAME);
 
-        if (mInteractionListener != null) {
-            mInteractionListener.onAdClicked();
-        }
+        UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.CLICK);
     }
 
     protected void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
         MoPubLog.log(CUSTOM, ADAPTER_NAME, String.format(LOG_SHOW_AD_FAILURE.getMessage(), placementId, error, message));
 
         MoPubLog.log(SHOW_FAILED, ADAPTER_NAME,
-                MoPubErrorCode.AD_SHOW_ERROR.getIntCode(),
-                MoPubErrorCode.AD_SHOW_ERROR);
-        if (mInteractionListener != null) {
-            mInteractionListener.onAdFailed(MoPubErrorCode.AD_SHOW_ERROR);
-        }
+                MoPubErrorCode.FULLSCREEN_SHOW_ERROR.getIntCode(),
+                MoPubErrorCode.FULLSCREEN_SHOW_ERROR);
+
+        UnityEventAdapter.sendAdPlaybackEvent(mInteractionListener, AdEvent.SHOW_FAILED, MoPubErrorCode.FULLSCREEN_SHOW_ERROR);
     }
 }
